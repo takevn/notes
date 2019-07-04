@@ -1,0 +1,27 @@
+重要点は２次元でBitを表す
+O値を観測するの確率：a^2
+1値を観測するの確率：b^2
+
+ユニたり変換
+
+qubitはXORと違うのは入力した値を推測できるようにするため。 Phép XOR khác để có thể suy ra input đầu vào.
+
+Bit Flipper
+Phase flipper
+hadamard flipper: dich chuyen 45 do trong hinh tron
+
+
+量子回路䛾可逆性(reversibility)
+回路全体を表現するユニタリ行列Uを書き下ろすことができな
+UU†=U†U=I
+から次䛾ことがわかる。
+
+補助ビットAncilla
+
+全ての可能な入力に対して、全ての結果が出る
+
+
+|+>と|−>䛿、明らかに異なる状態だが、観測によっては区別することができない
+theo vòng tròn thì nó chạy 90 độ, thành ra thông số về kết quả giống nhau(kiểu kiểu như vậy, đoạn này ko chính xác lắm)
+
+一時点は一つの結果が観測できる

@@ -1,0 +1,35 @@
+
+    @Override
+    protected void initializeCollection(ReplicatedMap<Long, Model> replicatedMap) {
+        Map<Long, ConcurrentSkipListSet<String>> dataMap = replicatedMap.values()
+                .stream()
+                .map(x -> (CommonWhiteDomainReviewModel) x)
+                .filter(x -> x.getReview() == 1)
+                .collect(Collectors.groupingBy(
+                        CommonWhiteDomainReviewModel::getSspId,
+                        Collectors.mapping(x -> {
+                            Long id = x.getCommonWhiteDomainId();
+                            String domain = CommonWhiteDomainModel.getModel(id).getDomain();
+                            return new StringBuilder(domain).reverse().toString();
+                        }, toCollection(ConcurrentSkipListSet::new)))
+                );
+
+        dataMap.forEach((sspId, treeMap) -> domainCacheMap.get(sspId).addAll(treeMap));
+    }
+
+
+    @Override
+    protected void initializeCollection(ReplicatedMap<Long, Model> replicatedMap) {
+        Map<Long, ConcurrentSkipListSet<String>> dataMap = replicatedMap.values()
+                .stream()
+                .map(x -> (CommonWhiteDomainReviewModel) x)
+                .filter(DomainReviewStatus::isApproved)
+                .filter(x -> Objects.nonNull(x.getCommonWhiteDomainModel()))
+                .collect(Collectors.groupingBy(
+                        CommonWhiteDomainReviewModel::getSspId,
+                        Collectors.mapping(x -> new StringBuilder(x.getCommonWhiteDomainModel().getDomain()).reverse().toString()
+                                , toCollection(ConcurrentSkipListSet::new)))
+                );
+
+        dataMap.forEach((sspId, treeMap) -> domainCacheMap.get(sspId).addAll(treeMap));
+    }

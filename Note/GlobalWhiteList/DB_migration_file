@@ -1,0 +1,25 @@
+class CreateCommonWhiteDomains < ActiveRecord::Migration[5.1]
+  def change
+    create_table :common_white_domains do |t|
+      t.string :domain, limit: 255, null: false, comment: 'ドメイン名。サブドメインを含まない部分'
+      t.string :url, limit: 3072, default: '', null: false, comment: 'サンプルURL'
+
+      t.timestamps
+      t.index :domain, :unique => true
+    end
+  end
+end
+
+
+class CreateCommonWhiteDomainReviews < ActiveRecord::Migration[5.1]
+  def change
+    create_table :common_white_domain_reviews do |t|
+      t.references :ssps, foreign_key: true, comment: 'セグメントID。紐づくssps。'
+      t.references :common_white_domains, foreign_key: true, comment: 'ドメインID。サブドメインを含まない部分。紐づくcommon_white_domains。'
+      t.integer :review, default: 0, null: false, comment: '審査状態 {0:"未審査", 1:"許可", 2:"拒否"}'
+
+      t.timestamps
+      t.index [:common_white_domains_id, :ssps_id], unique: true, name: 'idx_cmn_wht_domain_revs_on_cmn_wht_domains_id_and_ssps_id'
+    end
+  end
+end
